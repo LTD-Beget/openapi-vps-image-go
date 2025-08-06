@@ -1,0 +1,586 @@
+openapi: 3.0.3
+info:
+  title: API Образов облачных серверов
+  version: v1.0.1
+servers:
+- url: https://api.beget.com
+security:
+- bearerAuth: []
+tags:
+- name: ManageService
+paths:
+  /v1/image:
+    get:
+      operationId: ManageService_GetList
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image_GetListResponse'
+          description: OK
+      tags:
+      - ManageService
+    post:
+      operationId: ManageService_CreateImage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Image_CreateImageRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image_CreateImageResponse'
+          description: OK
+      tags:
+      - ManageService
+  /v1/image/calculation:
+    get:
+      operationId: ManageService_GetCalculation
+      parameters:
+      - explode: true
+        in: query
+        name: file_size
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: link
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: vps_id
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image_GetCalculationResponse'
+          description: OK
+      tags:
+      - ManageService
+  /v1/image/region:
+    get:
+      operationId: ManageService_GetRegionList
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image_GetRegionListResponse'
+          description: OK
+      tags:
+      - ManageService
+  /v1/image/{id}:
+    delete:
+      operationId: ManageService_DeleteImage
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image_DeleteImageResponse'
+          description: OK
+      tags:
+      - ManageService
+    put:
+      operationId: ManageService_UpdateImage
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Image_UpdateImageRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image_UpdateImageResponse'
+          description: OK
+      tags:
+      - ManageService
+  /v1/image/{id}/link:
+    get:
+      operationId: ManageService_GetDownloadLink
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image_GetDownloadLinkResponse'
+          description: OK
+      tags:
+      - ManageService
+  /v1/image/{id}/restore:
+    post:
+      operationId: ManageService_RestoreImage
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Image_RestoreImageRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image_RestoreImageResponse'
+          description: OK
+      tags:
+      - ManageService
+components:
+  schemas:
+    Image_CreateImageRequest:
+      properties:
+        source:
+          $ref: '#/components/schemas/Image_ImageSource'
+        name:
+          type: string
+        region:
+          type: string
+      type: object
+    Image_CreateImageResponse:
+      example:
+        image:
+          size_bytes: size_bytes
+          price: 0.8008281904610115
+          name: name
+          created_at: created_at
+          disk_size_bytes: disk_size_bytes
+          id: id
+          region: region
+          status: CREATED
+        error:
+          code: INTERNAL_ERROR
+          message: message
+      properties:
+        image:
+          $ref: '#/components/schemas/Image_Image'
+        error:
+          $ref: '#/components/schemas/Image_CreateImageResponse_Error'
+      type: object
+    Image_CreateImageResponse_Error:
+      example:
+        code: INTERNAL_ERROR
+        message: message
+      properties:
+        code:
+          enum:
+          - INTERNAL_ERROR
+          - REGION_MISMATCH
+          - VPS_NOT_FOUND
+          - VPS_ARCHIVED
+          - VPS_MIGRATING
+          - VPS_UNBLOCKING
+          format: enum
+          type: string
+        message:
+          type: string
+      type: object
+    Image_DeleteImageResponse:
+      example:
+        image:
+          size_bytes: size_bytes
+          price: 0.8008281904610115
+          name: name
+          created_at: created_at
+          disk_size_bytes: disk_size_bytes
+          id: id
+          region: region
+          status: CREATED
+        error:
+          code: INTERNAL_ERROR
+          message: message
+      properties:
+        image:
+          $ref: '#/components/schemas/Image_Image'
+        error:
+          $ref: '#/components/schemas/Image_DeleteImageResponse_Error'
+      type: object
+    Image_DeleteImageResponse_Error:
+      example:
+        code: INTERNAL_ERROR
+        message: message
+      properties:
+        code:
+          enum:
+          - INTERNAL_ERROR
+          format: enum
+          type: string
+        message:
+          type: string
+      type: object
+    Image_DownloadLinkInfo:
+      example:
+        link: link
+        expired_at: expired_at
+      properties:
+        link:
+          type: string
+        expired_at:
+          type: string
+      type: object
+    Image_GetCalculationResponse:
+      example:
+        price_calculation_info:
+          price: 0.8008281904610115
+        error:
+          code: INTERNAL_ERROR
+          message: message
+      properties:
+        price_calculation_info:
+          $ref: '#/components/schemas/Image_PriceCalculationInfo'
+        error:
+          $ref: '#/components/schemas/Image_GetCalculationResponse_Error'
+      type: object
+    Image_GetCalculationResponse_Error:
+      example:
+        code: INTERNAL_ERROR
+        message: message
+      properties:
+        code:
+          enum:
+          - INTERNAL_ERROR
+          - IMPOSSIBLE_TO_CALCULATE
+          format: enum
+          type: string
+        message:
+          type: string
+      type: object
+    Image_GetDownloadLinkResponse:
+      example:
+        download_link_info:
+          link: link
+          expired_at: expired_at
+        error:
+          code: INTERNAL_ERROR
+          message: message
+      properties:
+        download_link_info:
+          $ref: '#/components/schemas/Image_DownloadLinkInfo'
+        error:
+          $ref: '#/components/schemas/Image_GetDownloadLinkResponse_Error'
+      type: object
+    Image_GetDownloadLinkResponse_Error:
+      example:
+        code: INTERNAL_ERROR
+        message: message
+      properties:
+        code:
+          enum:
+          - INTERNAL_ERROR
+          - IMAGE_MIGRATING
+          format: enum
+          type: string
+        message:
+          type: string
+      type: object
+    Image_GetListResponse:
+      example:
+        images:
+        - size_bytes: size_bytes
+          price: 0.8008281904610115
+          name: name
+          created_at: created_at
+          disk_size_bytes: disk_size_bytes
+          id: id
+          region: region
+          status: CREATED
+        - size_bytes: size_bytes
+          price: 0.8008281904610115
+          name: name
+          created_at: created_at
+          disk_size_bytes: disk_size_bytes
+          id: id
+          region: region
+          status: CREATED
+      properties:
+        images:
+          items:
+            $ref: '#/components/schemas/Image_Image'
+          type: array
+      type: object
+    Image_GetRegionListResponse:
+      example:
+        regions:
+        - country: country
+          name: name
+          id: id
+          priority: 0
+          name_en: name_en
+        - country: country
+          name: name
+          id: id
+          priority: 0
+          name_en: name_en
+      properties:
+        regions:
+          items:
+            $ref: '#/components/schemas/Image_Region'
+          type: array
+      type: object
+    Image_Image:
+      example:
+        size_bytes: size_bytes
+        price: 0.8008281904610115
+        name: name
+        created_at: created_at
+        disk_size_bytes: disk_size_bytes
+        id: id
+        region: region
+        status: CREATED
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        region:
+          type: string
+        status:
+          enum:
+          - CREATED
+          - CREATING
+          - ERROR
+          - CONVERTING
+          - MIGRATING
+          format: enum
+          type: string
+        created_at:
+          type: string
+        price:
+          format: double
+          type: number
+        size_bytes:
+          type: string
+        disk_size_bytes:
+          type: string
+      type: object
+    Image_ImageSource:
+      properties:
+        link:
+          $ref: '#/components/schemas/Image_ImageSource_LinkSource'
+        vps:
+          $ref: '#/components/schemas/Image_ImageSource_VpsSource'
+      type: object
+    Image_ImageSource_LinkSource:
+      properties:
+        link:
+          type: string
+      type: object
+    Image_ImageSource_VpsSource:
+      properties:
+        id:
+          type: string
+        stop:
+          type: boolean
+      type: object
+    Image_PriceCalculationInfo:
+      example:
+        price: 0.8008281904610115
+      properties:
+        price:
+          format: double
+          type: number
+      type: object
+    Image_Region:
+      example:
+        country: country
+        name: name
+        id: id
+        priority: 0
+        name_en: name_en
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        name_en:
+          type: string
+        country:
+          type: string
+        priority:
+          format: uint32
+          type: integer
+      type: object
+    Image_Restore:
+      example:
+        image:
+          size_bytes: size_bytes
+          price: 0.8008281904610115
+          name: name
+          created_at: created_at
+          disk_size_bytes: disk_size_bytes
+          id: id
+          region: region
+          status: CREATED
+        vps_name: vps_name
+        date_create: date_create
+        date_complete: date_complete
+        restore_status: PENDING
+        vps_id: vps_id
+      properties:
+        image:
+          $ref: '#/components/schemas/Image_Image'
+        restore_status:
+          enum:
+          - PENDING
+          - PROCESSING
+          - COMPLETED
+          format: enum
+          type: string
+        vps_id:
+          type: string
+        vps_name:
+          type: string
+        date_create:
+          type: string
+        date_complete:
+          type: string
+      type: object
+    Image_RestoreImageRequest:
+      properties:
+        id:
+          type: string
+        vps_id:
+          type: string
+      type: object
+    Image_RestoreImageResponse:
+      example:
+        restore:
+          image:
+            size_bytes: size_bytes
+            price: 0.8008281904610115
+            name: name
+            created_at: created_at
+            disk_size_bytes: disk_size_bytes
+            id: id
+            region: region
+            status: CREATED
+          vps_name: vps_name
+          date_create: date_create
+          date_complete: date_complete
+          restore_status: PENDING
+          vps_id: vps_id
+        error:
+          code: INTERNAL_ERROR
+          message: message
+      properties:
+        restore:
+          $ref: '#/components/schemas/Image_Restore'
+        error:
+          $ref: '#/components/schemas/Image_RestoreImageResponse_Error'
+      type: object
+    Image_RestoreImageResponse_Error:
+      example:
+        code: INTERNAL_ERROR
+        message: message
+      properties:
+        code:
+          enum:
+          - INTERNAL_ERROR
+          - IMAGE_MIGRATING
+          - CONFIGURATION_NOT_ENOUGH
+          - IMAGE_NOT_READY
+          - REGION_MISMATCH
+          - UNSUITABLE_VPS_STATUS
+          - VALIDATION_ERROR
+          format: enum
+          type: string
+        message:
+          type: string
+      type: object
+    Image_UpdateImageRequest:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        region:
+          type: string
+      type: object
+    Image_UpdateImageResponse:
+      example:
+        image:
+          size_bytes: size_bytes
+          price: 0.8008281904610115
+          name: name
+          created_at: created_at
+          disk_size_bytes: disk_size_bytes
+          id: id
+          region: region
+          status: CREATED
+        error:
+          code: INTERNAL_ERROR
+          message: message
+      properties:
+        image:
+          $ref: '#/components/schemas/Image_Image'
+        error:
+          $ref: '#/components/schemas/Image_UpdateImageResponse_Error'
+      type: object
+    Image_UpdateImageResponse_Error:
+      example:
+        code: INTERNAL_ERROR
+        message: message
+      properties:
+        code:
+          enum:
+          - INTERNAL_ERROR
+          - IMAGE_MIGRATING
+          format: enum
+          type: string
+        message:
+          type: string
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
