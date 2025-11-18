@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: API Образов облачных серверов
-  version: v1.0.1
+  version: v1.0.3
 servers:
 - url: https://api.beget.com
 security:
@@ -219,6 +219,7 @@ components:
           - VPS_ARCHIVED
           - VPS_MIGRATING
           - VPS_UNBLOCKING
+          - SERVICE_DISABLED
           format: enum
           type: string
         message:
@@ -531,6 +532,7 @@ components:
           - REGION_MISMATCH
           - UNSUITABLE_VPS_STATUS
           - VALIDATION_ERROR
+          - SERVICE_DISABLED
           format: enum
           type: string
         message:
@@ -574,6 +576,7 @@ components:
           enum:
           - INTERNAL_ERROR
           - IMAGE_MIGRATING
+          - SERVICE_DISABLED
           format: enum
           type: string
         message:
