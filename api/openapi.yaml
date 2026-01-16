@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: API Образов облачных серверов
-  version: v1.0.3
+  version: v1.0.4
 servers:
 - url: https://api.beget.com
 security:
@@ -12,6 +12,37 @@ paths:
   /v1/image:
     get:
       operationId: ManageService_GetList
+      parameters:
+      - explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          format: uint32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: uint32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: filter
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -342,11 +373,15 @@ components:
           id: id
           region: region
           status: CREATED
+        total_count: 6
       properties:
         images:
           items:
             $ref: '#/components/schemas/Image_Image'
           type: array
+        total_count:
+          format: uint32
+          type: integer
       type: object
     Image_GetRegionListResponse:
       example:

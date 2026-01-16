@@ -285,7 +285,7 @@ Name | Type | Description  | Notes
 
 ## ManageServiceGetList
 
-> ImageGetListResponse ManageServiceGetList(ctx).Execute()
+> ImageGetListResponse ManageServiceGetList(ctx).Offset(offset).Limit(limit).Filter(filter).Sort(sort).Execute()
 
 
 
@@ -302,10 +302,14 @@ import (
 )
 
 func main() {
+    offset := int32(56) // int32 |  (optional)
+    limit := int32(56) // int32 |  (optional)
+    filter := "filter_example" // string |  (optional)
+    sort := "sort_example" // string |  (optional)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.ManageServiceApi.ManageServiceGetList(context.Background()).Execute()
+    resp, r, err := apiClient.ManageServiceApi.ManageServiceGetList(context.Background()).Offset(offset).Limit(limit).Filter(filter).Sort(sort).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `ManageServiceApi.ManageServiceGetList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -317,12 +321,19 @@ func main() {
 
 ### Path Parameters
 
-This endpoint does not need any parameter.
+
 
 ### Other Parameters
 
 Other parameters are passed through a pointer to a apiManageServiceGetListRequest struct via the builder pattern
 
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **offset** | **int32** |  | 
+ **limit** | **int32** |  | 
+ **filter** | **string** |  | 
+ **sort** | **string** |  | 
 
 ### Return type
 
