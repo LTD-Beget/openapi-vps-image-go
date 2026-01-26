@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Code** | Pointer to **string** |  | [optional] 
 **Message** | Pointer to **string** |  | [optional] 
+**RegionMismatchError** | Pointer to [**ImageCreateImageResponseErrorRegionMismatchError**](ImageCreateImageResponseErrorRegionMismatchError.md) |  | [optional] 
 
 ## Methods
 
@@ -75,6 +76,31 @@ SetMessage sets Message field to given value.
 `func (o *ImageCreateImageResponseError) HasMessage() bool`
 
 HasMessage returns a boolean if a field has been set.
+
+### GetRegionMismatchError
+
+`func (o *ImageCreateImageResponseError) GetRegionMismatchError() ImageCreateImageResponseErrorRegionMismatchError`
+
+GetRegionMismatchError returns the RegionMismatchError field if non-nil, zero value otherwise.
+
+### GetRegionMismatchErrorOk
+
+`func (o *ImageCreateImageResponseError) GetRegionMismatchErrorOk() (*ImageCreateImageResponseErrorRegionMismatchError, bool)`
+
+GetRegionMismatchErrorOk returns a tuple with the RegionMismatchError field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRegionMismatchError
+
+`func (o *ImageCreateImageResponseError) SetRegionMismatchError(v ImageCreateImageResponseErrorRegionMismatchError)`
+
+SetRegionMismatchError sets RegionMismatchError field to given value.
+
+### HasRegionMismatchError
+
+`func (o *ImageCreateImageResponseError) HasRegionMismatchError() bool`
+
+HasRegionMismatchError returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

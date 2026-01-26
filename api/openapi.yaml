@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: API Образов облачных серверов
-  version: v1.0.5
+  version: v1.0.6
 servers:
 - url: https://api.beget.com
 security:
@@ -230,6 +230,9 @@ components:
           status: CREATED
         error:
           code: INTERNAL_ERROR
+          region_mismatch_error:
+            vps_region: vps_region
+            requested_region: requested_region
           message: message
       properties:
         image:
@@ -240,6 +243,9 @@ components:
     Image_CreateImageResponse_Error:
       example:
         code: INTERNAL_ERROR
+        region_mismatch_error:
+          vps_region: vps_region
+          requested_region: requested_region
         message: message
       properties:
         code:
@@ -254,6 +260,18 @@ components:
           format: enum
           type: string
         message:
+          type: string
+        region_mismatch_error:
+          $ref: '#/components/schemas/Image_CreateImageResponse_Error_RegionMismatchError'
+      type: object
+    Image_CreateImageResponse_Error_RegionMismatchError:
+      example:
+        vps_region: vps_region
+        requested_region: requested_region
+      properties:
+        vps_region:
+          type: string
+        requested_region:
           type: string
       type: object
     Image_DeleteImageResponse:
